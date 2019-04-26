@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>幸运转转转</title>
+    <link rel="stylesheet" href="css/api.css">
+    <style>
+     html{
+         height: 100%;
+     }
+  html{
+     background-image: url('./img/229@2x.png');
+     background-repeat: no-repeat;
+     background-size: 100% 100%;
+     background-attachment: fixed;
+  }
+
+ .title1{
+     /* position: relative;
+     top: 1.2rem; */
+     width: 40%;
+     height: .8rem;
+     margin: 0 auto;
+     margin-top: 1rem;
+     background-image: url('./img/WechatIMG2@2x.png');
+     background-repeat: no-repeat;
+     background-size: 100% 100%;
+}
+.title2{
+    /* position: relative;
+     top: 1.8rem; */
+     width: 75%;
+     height: 1.4rem;
+     margin: 0 auto;
+     margin-top: 1rem;
+     background-image: url('./img/223@2x.png');
+     background-repeat: no-repeat;
+     background-size: 100% 100%;
+}
+.phone{
+    height: 0.7rem;
+    border: 1px solid #FBD396;
+     background: rgba(255,255,255,.2);
+     border-radius:0.4rem;
+}
+.phone img{
+    margin-left: .4rem;
+    margin-top: .1rem;
+  width: .3rem;
+  height: .5rem;
+  vertical-align: middle;
+}
+ .mesinput{
+     width: 80%;
+     margin: 0 auto;
+     margin-top: 1.2rem;
+     color: #fff;
+     font-size: 0.32rem;
+}
+ input{
+     width: 69%;
+     color: #fff;
+     vertical-align: top;
+     text-indent: 0.28rem;
+    
+     outline: none;
+    
+     height: 0.7rem;
+}
+input::placeholder{
+    color: rgba(255,255,255,.7);
+    
+}
+.pw{
+    display: inline-block;
+    width: 1.36rem;
+    height: 0.6rem;
+    line-height: 0.6rem;
+    overflow: hidden;
+}
+ .name{
+     margin-top: 0.8rem;
+}
+ .sub-btn{
+    width: 80%;
+    height: 1rem;
+    margin: 0 auto;
+    color: #FE973D;
+    text-align: center;
+    line-height: 1rem;
+    margin-top: 1.4rem;
+    background-color: #fff;
+    border-radius: 6px;
+    box-shadow: 0 1px 8px 0px #ccc;
+}
+.sub-btn img{
+    width: .4rem;
+    height: .4rem;
+    vertical-align: middle;
+}
+.dialog-window{
+
+    display: flex;
+    display: -webkit-flex;
+    display: none;
+    justify-content: center;
+    align-items: center;
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    left: 0;
+    top: 0;
+    background: rgba(0,0,0,.5);
+    z-index: 999;
+}
+.dialog-box{
+    position: relative;
+    width: 60%;
+    height:250px ;
+    background-image: url('./img/225@2x.png');
+    background-repeat: no-repeat;
+    background-size: 100% 100%;
+}
+.dialog-content{
+    position: absolute;
+    bottom: 80px;
+    left: 15%;
+    width: 70%;
+    color:#666;
+    text-align: center;
+}
+.dialog-btn{
+    position: absolute;
+    bottom: 20px;
+    left: 15%;
+    width: 70%;
+    text-align: center;
+    line-height:40px;
+    height: 40px;
+    color: #fff;
+    background:linear-gradient(90deg,rgba(255,184,99,1) 0%,rgba(254,132,100,1) 100%);
+    border-radius: 22px;
+}
+</style>
+</head>
+
+<body>
+    <div class="title1">
+ 
+    </div>
+    <div class="title2">
+ 
+    </div>
+    <div class="mesinput">
+        <div class="phone"><img src="./img/185@2x.png" alt="">
+        <input type="number" placeholder="请输入您的手机号" id='usernumber'>
+        </div>
+        <!-- <div class="name"><div class="pw">姓&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;名</div>&nbsp;&nbsp;&nbsp;<input type="text"></div> -->
+    </div>
+    <div class="sub-btn" onclick="login()">参与抽奖 <img src="./img/186@2x.png" alt=""></div>
+    <div class="dialog-window">
+        <div class="dialog-box">
+                <div class="dialog-content">您未输入手机号码 请输入手机号码进行登陆</div>
+        <div class="dialog-btn">确定</div>
+    </div>
+</div>
+<div class="bg"></div>
+    <script src='./js/remFlex.js'></script>
+    <script src="https://cdn.bootcss.com/jquery/3.3.0/jquery.js"></script>
+    <script>
+         $('.dialog-btn').click(function(){
+            $('.dialog-window').css('display','none')
+         }) 
+        function login() {
+            var phone = document.getElementById('usernumber').value;
+            if (!phone || phone == '') {
+                $('.dialog-content').text('手机号码不能为空')
+                $('.dialog-window').css('display','flex')
+                // return alert('手机号码不能为空!');
+            }
+            $.ajax({
+                    type: "GET",
+
+                    url: 'http://walle.91yunshi.com/activity/'+getUrlParms().id,
+                   
+                    dataType: "json",
+                    success: function (res) {
+                    
+                   if(res.code==1001){
+                    $.ajax({
+                    type: "GET",
+
+                    url: 'http://walle.91yunshi.com/user?phone=' + phone,
+                    
+                    dataType: "json",
+                    success: function (res) {
+                        if (res.code == 1001) {
+                            var userdata = JSON.stringify(res.data)
+                            localStorage.setItem('userdata', userdata)
+                            localStorage.setItem('token', res.data.token)
+                            // alert('恭喜' + res.data.userName + '登陆成功!');
+                              window.location.href = 'index.html?id='+getUrlParms().id;
+                        }
+                   
+                    },
+                    error:function(err){
+                        $('.dialog-content').text('用户没有抽奖权限')
+                      $('.dialog-window').css('display','flex')
+                        //  alert('用户没有抽奖权限');
+                    
+                    }})
+                   }
+                    },
+                    error:function(err){
+                        $('.dialog-content').text(err.responseJSON.msg)
+                      $('.dialog-window').css('display','flex')
+                        //  alert(err.responseJSON.msg);
+                      
+                    }})
+
+        }
+    </script>
+</body>
+
+</html>

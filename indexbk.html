@@ -1,0 +1,605 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>云师抽奖活动</title>
+    <link rel="stylesheet" href="css/api.css">
+    <style>
+        html{
+            height: 100%;
+            overflow: hidden;
+        }
+        body {
+            height: 100%;
+            background-image: url('./img/229@2x.png');
+            background-repeat: no-repeat;
+            background-size: 100% 100%;
+            overflow: hidden;
+        }
+
+        .title1{
+     width: 40%;
+     height: .8rem;
+     margin: 0 auto;
+     margin-top: .8rem;
+     background-image: url('./img/WechatIMG2@2x.png');
+     background-repeat: no-repeat;
+     background-size: 100% 100%;
+}
+.title2{
+     width: 75%;
+     height: 1.4rem;
+     margin: 0 auto;
+     margin-top: .4rem;
+     background-image: url('./img/223@2x.png');
+     background-repeat: no-repeat;
+     background-size: 100% 100%;
+}
+
+        .mesinput {
+            width: 75%;
+            margin: 0 auto;
+            margin-top: 0.1rem;
+            color: #fff;
+            font-size: 0.32rem;
+        }
+
+        .tip {
+            width: 90%;
+            height: 0.6rem;
+            margin: 0 auto;
+            color: #fff;
+            border: 1px solid #FBD396;
+            background: #E83E30;
+            font-size: 0.32rem;
+            text-align: center;
+            line-height: 0.6rem;
+            border-radius: 0.4rem;
+            overflow: hidden;
+        }
+        .tip li{
+            height: 0.6rem; 
+            line-height: 0.6rem;
+            text-align: center;
+            overflow: hidden;
+        }
+        .mainbox {
+            box-sizing: border-box;
+            width: 7rem;
+            height: 7rem;
+            margin: 0 auto;
+            margin-top: 0.1rem;
+           
+            overflow: hidden;
+        }
+
+        .lottery {
+            position: relative;
+            display: inline-block;
+        }
+
+        .lottery img {
+            position: absolute;
+    top: 39%;
+    left: 40%;
+    width: 60px;
+    height: 60px;
+   
+    cursor: pointer;
+        }
+
+        #message {
+            position: absolute;
+            top: 0px;
+            left: 10%;
+        }
+        .prizetimes{
+            text-align: center;
+            color:#FFFEFD;
+            font-size: 14px;
+        }
+.yellow{
+    color: #FCE601;
+    font-size: 22px;
+    font-style: normal;
+}
+.sub-btn{
+
+width:130px;
+margin: 0 auto;
+margin-top: .2rem;
+color: #fff;
+font-size: 14px;
+text-align: center;
+line-height: 30px;
+background: rgba(255,255,255,.3);
+border-radius: 16px;
+}
+.dialog-window{
+
+display: flex;
+display: -webkit-flex;
+display: none;
+justify-content: center;
+align-items: center;
+position: fixed;
+width: 100%;
+height: 100%;
+left: 0;
+top: 0;
+background: rgba(0,0,0,.5);
+z-index: 999;
+}
+.dialog-box{
+position: relative;
+width: 50%;
+height:250px ;
+background-image: url('./img/228@2x.png');
+background-repeat: no-repeat;
+background-size: 100% 100%;
+}
+.dialog-content{
+position: absolute;
+bottom: 80px;
+left: 15%;
+width: 70%;
+color:#fff;
+text-align: center;
+}
+.dialog-btn{
+position: absolute;
+bottom: 20px;
+left: 15%;
+width: 70%;
+text-align: center;
+line-height:40px;
+height: 40px;
+color: #fff;
+background:linear-gradient(90deg,rgba(255,184,99,1) 0%,rgba(254,132,100,1) 100%);
+border-radius: 22px;
+}
+    </style>
+</head>
+
+<body>
+  <!-- <div class="noprize" onclick="closenoprize()"> <img src="./img/weizhongjiang@2x.png" alt="" class="noprizeimg"></div> -->
+    <!-- <div class="shadow" onclick="closebtn(this)">
+        <div class="flash"><img src="./img/shengguang.png" alt="" srcset=""></div>
+        <div class="alert">
+            <div class="zjtime"></div>
+            <div class="record-tit"></div>
+            <img src="" alt="" class="zjpic">   
+           
+        </div>
+    </div> -->
+    <div class="dialog-window">
+            <div class="dialog-box">
+                    <div class="dialog-content">很遗憾您未中奖</div>
+            <div class="dialog-btn">确定</div>
+        </div></div>
+    <div class="title1">
+ 
+        </div>
+        <div class="title2">
+     
+        </div>
+    <div class="mesinput">
+        <div class="tip">
+            <ul id='tipbox'>
+            <li> 136****2585抽中50元现金</li>
+            <li> 136****2585抽中50元现金</li>
+             <li> 136****2585抽中50元现金</li>
+        </ul>
+    </div>
+    </div>
+    <div class="mainbox">
+            <div class="lottery">
+                    <canvas id="myCanvas" width="300" height="300" >
+                        当前浏览器版本过低，请使用其他浏览器尝试
+                    </canvas>
+                    <p id="message"></p>
+                    <img src="./img/start.png" id="start">
+                </div>
+    </div>
+    <div class="prizetimes">您还有 <em class="yellow">1</em> 次抽奖机会</div>
+    <div class="sub-btn" onclick="look()">—我的中奖纪录—</div>
+    <script src="https://cdn.bootcss.com/jquery/3.3.0/jquery.js"></script>
+    <script src='./js/myslideup.js'> </script>
+     <script src='./js/turntable.js'></script>
+    <script src='./js/remFlex.js'></script>
+    <script>
+       var can=  document.getElementById('myCanvas'),screenwidth=document.getElementsByClassName('mainbox')[0].offsetWidth;
+        
+       can.width=can.height=screenwidth;
+
+var wheelSurf,initData={data:[]},angel;
+
+        // 初始化装盘数据 正常情况下应该由后台返回
+        // var initData = {
+        //     "success": true,
+        //     "list": [{
+        //             "id": 100,
+        //             "name": "5000元京东卡",
+        //             "image": "./img/186@2x.png",
+        //             "rank":1,
+        //             "percent":30
+        //         },
+        //         {
+        //             "id": 101,
+        //             "name": "1000元京东卡",
+        //             "image": "./img/186@2x.png",
+        //             "rank":2,
+        //             "percent":20
+        //         },
+        //         {
+        //             "id": 102,
+        //             "name": "100个比特币",
+        //             "image": "./img/186@2x.png",
+        //             "rank":3,
+        //             "percent":20
+        //         },
+        //         {
+        //             "id": 103,
+        //             "name": "50元话费",
+        //             "image": "./img/186@2x.png",
+        //             "rank":4,
+        //             "percent":15
+        //         },
+        //         {
+        //             "id": 104,
+        //             "name": "100元话费",
+        //             "image": "./img/186@2x.png",
+        //             "rank":5,
+        //             "percent":15
+        //         },
+               
+        //     ]
+        // }
+
+        // 计算分配获奖概率(前提所有奖品概率相加100%)
+        // function getGift(){
+        //     var percent = Math.random()*100
+        //     var totalPercent = 0
+        //     for(var i = 0 ,l = initData.list.length;i<l;i++){
+        //         totalPercent += initData.list[i].percent
+        //         if(percent<=totalPercent){
+        //             return initData.list[i]
+        //         }
+        //     }           
+        // }
+        var list = {};
+   
+        $.ajax({
+                    type: "GET",
+
+                    url: 'http://walle.91yunshi.com/prize?activityId='+getUrlParms().id,
+                    headers: {
+              'Authorization':localStorage.getItem('token')
+                     },
+                    data: {
+                     
+                        
+                    },
+                    dataType: "json",
+                    success: function (res) {
+                     
+                      
+                        if (res.code == 1001) {
+                            initData.data=res.data;
+                            angel = 360 / initData.data.length;
+
+
+
+                            // var list = {}
+        
+        
+        // 格式化成插件需要的奖品列表格式
+        for (var i = 0, l = initData.data.length; i < l; i++) {
+            list[i] = {
+                id:initData.data[i].id,
+                name: initData.data[i].prizeName,
+                image: initData.data[i].prizeImageUrl
+            }
+        }
+        // 查看奖品列表格式
+
+        // 定义转盘奖品
+        wheelSurf = $('#myCanvas').WheelSurf({
+            list:list, // 奖品 列表，(必填)
+            outerCircle: {
+                color: '#F76B38' // 外圈颜色(可选)
+            },
+            innerCircle: {
+                color: 'transparent' // 里圈颜色(可选)
+            },
+            dots: ['#fbf0a9', '#fbb936'], // 装饰点颜色(可选)
+            disk: ['#FFBEBC', '#FFDAD8','#FFBEBC', '#FFDAD8', '#FFBEBC', '#FFDAD8'], //中心奖盘的颜色，默认7彩(可选)
+            title: {
+                color: '#5c1e08',
+                font: '12px Arial'
+            } // 奖品标题样式(可选)
+        })
+
+                    // 初始化转盘
+        wheelSurf.init()
+                        }
+                    }
+            })
+
+
+
+      
+        // 抽奖
+        var throttle = true;
+        $("#start").on('click', function () {
+
+
+        $.ajax({    type: "GET",
+                    url: 'http://walle.91yunshi.com/luckDrawRecord/new',
+                    headers: { 'Authorization':localStorage.getItem('token')},
+                    dataType: "json",
+                    success: function (data) {
+                        console.log(data);
+            //             var winData =  // 正常情况下获奖信息应该由后台返回
+            // console.log(winData);
+            // $("#message").html('')
+            // if(!throttle){
+            //     return false;
+            // }
+            // throttle = false;
+            // var count = 0
+            // // 计算奖品角度
+
+            // for (const key in list) {
+            //     if (list.hasOwnProperty(key)) {                    
+            //         if (winData.id == list[key].id) {
+            //             break;
+            //         }
+            //         count++    
+            //     }
+            // }
+      
+            // // 转盘抽奖，
+            // wheelSurf.lottery((count * angel + angel / 2), function () {
+            //     $("#message").html(winData.name)
+            //     throttle = true;
+            // })
+                    }})
+
+        })
+
+            function look() {
+                window.location.href = 'win.html?id='+getUrlParms().id
+            }
+
+
+
+//         var time = null;
+//         var times = 0;
+//         var nodes = document.getElementsByClassName('yingyin');
+//         var nodelength = nodes.length;
+//         var circle = 0;
+//         var picarr = [];
+
+//         function random() {
+//             return 3 + Math.floor(Math.random() * 4);
+//         }
+
+
+//         var sytimes = document.getElementById('sytimes');
+//         var userdata = localStorage.getItem('userdata')
+//         userdata = JSON.parse(userdata);
+//         sytimes.innerText = userdata.luckDrawSum;
+
+        // function getGift() {
+   
+                  
+//                     function randomsort(a, b) {
+//                         return Math.random() > .5 ? -1 : 1;
+//                         //用Math.random()函数生成0~1之间的随机数与0.5比较，返回-1或1
+//                     }
+
+//                     picarr.sort(randomsort);
+//                    var totaltip=document.querySelectorAll('.stip');
+//                     var allimg = document.getElementsByClassName('whitebox')[0].getElementsByTagName('img');
+//                     for (let index = 0; index < picarr.length; index++) {
+
+//                         allimg[index].src = picarr[index].prizeImageUrl;
+//                         if(typeof picarr[index].noprize!='undefined'){
+//                             totaltip[index].innerText=picarr[index].prizeName;
+//                         }else{
+//                             allimg[index].style='width:1.2rem;height:1rem;margin-top:.2rem;'
+//                         }
+                        
+//                         allimg[index].id= 'img'+picarr[index].id;
+//                          allimg[index].setAttribute('datasrc', picarr[index].id)
+//                     }
+//                     chooseWhiteBox(1200);
+//                 }else{
+
+//                 }
+
+//                     }})
+
+            
+
+
+//         }
+//         getGift()
+        $.ajax({//滚动列表公告数据获取
+                    type: "GET",
+
+                    url: 'http://walle.91yunshi.com/luckDrawRecord/new',
+                    headers: {
+              'Authorization':localStorage.getItem('token')
+                     },
+                    data: {
+                      
+                        
+                    },
+                    dataType: "json",
+                    success: function (data) {
+                           
+                            var str="";
+                            for (let index = 0; index < data.data.length; index++) {
+                                
+                                var strPrize=(data.data[index].prizeName).split(',');
+                               
+                                if(typeof strPrize[1]=='undefined'){
+                                    strPrize=strPrize[0]
+                                }else{
+                                    strPrize=strPrize[1] 
+                                }
+                                 str+= `<li>恭喜${data.data[index].phone}抽中${strPrize}</li>`
+                                
+                             
+                                
+                            }
+                            document.getElementById('tipbox').innerHTML=str;
+                            $(".tip").scrollTop({
+     speed:80 //数值越大 速度越慢
+ });
+                            // $("#tipbox").simpleSpy();
+                    },
+                    error:function(err){
+                        // console.log(err.responseJSON.msg);
+                         alert(err.responseJSON.msg);
+                        //  window.location.href='login.html'
+                    }});         
+//         function chooseWhiteBox(speed, point, fn) {
+//             var randomNum = random()
+//             var current = point || 0;
+//             clearInterval(time);
+//             time = setInterval(function () {
+//                 times++;
+
+//                 for (let index = 0; index < nodelength; index++) {
+//                     nodes[index].style.cssText = 'background:rgba(0,0,0,.4);'
+//                 }
+//                 if (times > 7) {
+//                     circle++;
+//                     times = 0;
+//                 }
+//                 //  console.log(circle);
+
+//                 if (times == point && circle > randomNum) {
+//                     circle = 0;
+
+//                     clearInterval(time);
+//                     setTimeout(function () {
+                      
+//                         fn && fn(times)
+//                     }, 1000)
+
+
+//                 }
+//                 document.getElementById(times).style.cssText = 'background:none;'
+
+//             }, speed)
+
+//         }
+      
+//         var twoclick=true;
+//         function begin() {
+            
+//           if(!twoclick){
+//               return;
+//           }
+//           twoclick=false;
+//             $.ajax({
+//                     type: "PUT",
+
+//                     url: 'http://walle.91yunshi.com/prize?activityId='+getUrlParms().id,
+//                     headers: {
+//               'Authorization':localStorage.getItem('token')
+//                      },
+//                     data: {
+                     
+                        
+//                     },
+//                     dataType: "json",
+//                     success: function (data) {
+                    
+//                         if(data.code==1001){
+                         
+//                           var realnum=document.getElementById('img'+data.data.id).parentNode.id;
+                       
+//                       var num=  realnum.substring(4,2);
+//                       sytimes.innerText = data.data.luckDrawSum;
+//                         chooseWhiteBox(100, num, function (current) {
+                          
+                            
+//                                      var userdata = JSON.stringify(data.data)
+//                     localStorage.setItem('userdata', userdata)
+                   
+             
+//                     var date=new Date()
+//                             document.querySelector('.zjtime').innerText =date.getFullYear()+'-'+(date.getMonth()+1)+'-'+date.getDate()+'  '+date.getHours()+':'+date.getMinutes();
+//                             document.querySelector('.record-tit').innerText = '恭喜您中了' + data.data.prizeName;
+//                             document.querySelector('.zjpic').src = data.data.prizeImageUrl;
+//                             document.querySelector('.shadow').style.display = 'block';
+//                             twoclick=true;
+//                         });                   
+//               }else{
+//                 var userdata = JSON.stringify(data.data)
+// 					localStorage.setItem('userdata', userdata)
+//                     sytimes.innerText = data.data.luckDrawSum;
+//                     twoclick=true;
+// 					if (data.data.luckDrawSum <= 0) {
+//                         return alert('您的次数已经用完啦(*╹▽╹*)')
+//                     }
+//               } },
+//                     error:function(err){
+                       
+//                         if(err.code==9000){
+//                             sytimes.innerText =0;
+//                         }
+//                         var err=err.responseJSON;
+                      
+//                         if(err.data&&typeof err.data.luckDrawSum!='undefined'){
+//                             sytimes.innerText = err.data.luckDrawSum;
+//                         }
+                   
+//                     twoclick=true;
+//                    var newarr=[];
+//                     for (let index = 0; index < picarr.length; index++) {
+//                            if(typeof picarr[index].noprize!='undefined'){
+//                             newarr.push(picarr[index])                       
+//                            }
+//                         }
+                      
+//                    var rnum=  newarr[Math.floor(Math.random()*newarr.length)].id;   
+               
+//                           var realnum=document.getElementById('img'+rnum).parentNode.id;
+                       
+//                        var num=  realnum.substring(4,2);
+                      
+//                         chooseWhiteBox(100, num, function (current) {
+                          
+//                             document.querySelector('.noprize').style.display='block';
+//                             twoclick=true;
+//              });     
+//                         // alert(err.msg);
+                      
+//                     }});              
+
+//             }
+//          function closenoprize(){
+//             chooseWhiteBox(1200);
+//             document.querySelector('.noprize').style.display='none';
+//          }
+//             function closebtn(self) {
+//                 chooseWhiteBox(1200);
+//                 self.style.display = 'none';
+//             }
+
+//             function look() {
+//                 window.location.href = 'win.html?id='+getUrlParms().id
+//             }
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>幸运转转转</title>
+<link rel="stylesheet" href="css/api.css">
+<style>
+html,body{
+     height: 100%;
+     background-image: url('./img/229@2x.png');
+     background-repeat: no-repeat;
+     background-size: 100% 100%;
+     background-attachment: fixed;
+}
+.title1{
+     position: relative;
+     top: 1.2rem;
+     width: 40%;
+     height: .8rem;
+     margin: 0 auto;
+     background-image: url('./img/WechatIMG2@2x.png');
+     background-repeat: no-repeat;
+     background-size: 100% 100%;
+}
+.title2{
+    position: relative;
+     top: 1.8rem;
+     width: 75%;
+     height: 1.4rem;
+     margin: 0 auto;
+     background-image: url('./img/223@2x.png');
+     background-repeat: no-repeat;
+     background-size: 100% 100%;
+}
+ .mesinput{
+     width: 80%;
+     margin: 0 auto;
+     margin-top: 2rem;
+     color: #fff;
+     font-size: 0.32rem;
+}
+ .record{
+     width: 100%;
+     height: 1rem;
+     line-height: 1rem;
+     text-align: center;
+     color: #fff;
+     background: rgba(255, 255, 255, .3);
+     /* background-image: url('./img/gongjiangjilu@2x.png');
+     background-repeat: no-repeat;
+     background-size: 100% 100%; */
+}
+ .list{
+     width: 100%;
+}
+ .list li{
+     margin: 0.08rem 0;
+     background: #fff;
+}
+ li:nth-child(2n+1){
+     background: #FFE3DD;
+}
+ .list div{
+     display: inline-block;
+     width: 33.3%;
+     text-align: center;
+     padding: 0.12rem 0;
+     font-size: 0.28rem;
+     color: #FE9700;
+}
+ .list .sub div{
+     display: inline-block;
+     width: 33.3%;
+     text-align: center;
+     padding: 0.12rem 0;
+     color: #BB331D;
+     font-size: 0.32rem;
+}
+ .sub-btn{
+    /* position: absolute;
+    bottom: 2rem;
+    left: 10%; */
+    width: 100%;
+    width: 80%;
+    height: 1rem;
+    margin: 0 auto;
+    color: #FE973D;
+    text-align: center;
+    line-height: 1rem;
+    margin-top: .5rem;
+    background-color: #fff;
+    border-radius: 6px;
+    box-shadow: 0 1px 8px 0px #ccc;
+}
+ 
+</style>
+</head>
+<body>
+    <div class="title1">
+
+    </div>
+    <div class="title2">
+
+        </div>
+    <div class="mesinput">
+        <div class="record">我的中奖纪录</div>
+        <div class="list">
+            <ul id='listbox'>
+                <li class='sub'><div class="phone">手机号</div><div class="money">中奖金额</div><div class="time">中奖时间</div></li>
+            <li><div class="phonenumber">138*****2585</div><div class="getmoney">50元</div><div class="gettime">2018-5-26</div></li>
+            <li><div class="phonenumber">138*****2585</div><div class="getmoney">50元</div><div class="gettime">2018-5-26</div></li>
+            <li><div class="phonenumber">138*****2585</div><div class="getmoney">50元</div><div class="gettime">2018-5-26</div></li>
+            <li><div class="phonenumber">138*****2585</div><div class="getmoney">50元</div><div class="gettime">2018-5-26</div></li>
+            </ul>
+        </div>
+       </div>
+    <div class="sub-btn" onclick="getGift()">返 回</div>
+    <script src='./js/remFlex.js'></script>
+    <script src="https://cdn.bootcss.com/jquery/3.3.0/jquery.js"></script>
+    <script>
+         var userdata = localStorage.getItem('userdata')
+        userdata = JSON.parse(userdata);
+          $.ajax({
+                    type: "GET",
+
+                    url: 'http://walle.91yunshi.com/luckDrawRecord',
+                    headers: {
+              'Authorization':localStorage.getItem('token')
+                     },
+                    data: {
+                        pageSize:100,
+                        pageNumber:1
+                        
+                    },
+                    dataType: "json",
+                    success: function (data) {
+                            console.log(data.data);
+                            var str="<li class='sub'><div class='phone'>手机号</div><div class='money'>中奖金额</div><div class='time'>中奖时间</div></li>";
+                            for (let index = 0; index < data.data.length; index++) {
+                                
+                             if( data.data[index].status==1){
+                                 str+= `<li><div class="phonenumber">${data.data[index].phone}</div><div class="getmoney">${data.data[index].prizeName}</div><div class="gettime">${ data.data[index].createTime.substring(11,0)}</div></li>`
+                                
+                             } 
+                                
+                            }
+                            document.getElementById('listbox').innerHTML=str;
+                            
+                                      
+                    },
+                    error:function(err){
+                        // console.log(err.responseJSON.msg);
+                         alert(err.responseJSON.msg);
+                        //  window.location.href='login.html'
+                    }});         
+        function getGift(){
+            window.location.href='index.html?id='+getUrlParms().id
+        }
+    </script>
+</body>
+</html>

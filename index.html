@@ -1,0 +1,491 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>幸运转转转</title>
+    <link rel="stylesheet" href="css/api.css">
+    <style>
+        html {
+            height: 100%;
+            overflow: hidden;
+        }
+
+        body {
+            height: 100%;
+            background-image: url('./img/229@2x.png');
+            background-repeat: no-repeat;
+            background-size: 100% 100%;
+            overflow: hidden;
+        }
+
+        .title1 {
+            width: 40%;
+            height: .8rem;
+            margin: 0 auto;
+            margin-top: .4rem;
+            background-image: url('./img/WechatIMG2@2x.png');
+            background-repeat: no-repeat;
+            background-size: 100% 100%;
+        }
+
+        .title2 {
+            width: 75%;
+            height: 1.4rem;
+            margin: 0 auto;
+            margin-top: .2rem;
+            background-image: url('./img/223@2x.png');
+            background-repeat: no-repeat;
+            background-size: 100% 100%;
+        }
+
+        .mesinput {
+            width: 75%;
+            margin: 0 auto;
+            margin-top: 0.1rem;
+            color: #fff;
+            font-size: 0.32rem;
+        }
+
+        .tip {
+            width: 90%;
+            height: 0.6rem;
+            margin: 0 auto;
+            color: #fff;
+            border: 1px solid #FBD396;
+            background: #E83E30;
+            font-size: 0.32rem;
+            text-align: center;
+            line-height: 0.6rem;
+            border-radius: 0.4rem;
+            overflow: hidden;
+        }
+
+        .tip li {
+            height: 0.6rem;
+            line-height: 0.6rem;
+            text-align: center;
+            overflow: hidden;
+        }
+
+        .mainbox {
+            position: relative;
+            box-sizing: border-box;
+            width: 6.5rem;
+            height: 6.5rem;
+            margin: 0 auto;
+            margin-top: 0.1rem;
+
+            overflow: hidden;
+        }
+
+        .lottery {
+           
+            /* display: inline-block; */
+        }
+
+        .lottery img {
+            position: absolute;
+            top: 39%;
+            left: 40%;
+            width: 66px;
+    height: 66px;
+            cursor: pointer;
+        }
+
+        #message {
+            position: absolute;
+            top: 0px;
+            left: 10%;
+        }
+
+        .prizetimes {
+            text-align: center;
+            color: #FFFEFD;
+            font-size: 14px;
+        }
+
+        .yellow {
+            color: #FCE601;
+            font-size: 22px;
+            font-style: normal;
+        }
+
+        .sub-btn {
+
+            width: 130px;
+            margin: 0 auto;
+            margin-top: .2rem;
+            color: #fff;
+            font-size: 14px;
+            text-align: center;
+            line-height: 30px;
+            background: rgba(255, 255, 255, .3);
+            border-radius: 16px;
+        }
+
+        .dialog-window {
+
+            display: flex;
+            display: -webkit-flex;
+            display: none;
+            justify-content: center;
+            align-items: center;
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            left: 0;
+            top: 0;
+            background: rgba(0, 0, 0, .5);
+            z-index: 999;
+        }
+
+        .dialog-box {
+            position: relative;
+            width:200px;
+            height: 250px;
+            background-image: url('./img/227@2x.png');
+            background-repeat: no-repeat;
+            background-size: 100% 100%;
+        }
+        .dialog-box.noprize{
+            background-image: url('./img/228@2x.png');
+         }
+        .dialog-content {
+            position: absolute;
+            bottom: 80px;
+            left: 15%;
+            width: 70%;
+            color: #fff;
+            text-align: center;
+        }
+
+        .dialog-btn {
+            position: absolute;
+            bottom: 20px;
+            left: 15%;
+            width: 70%;
+            text-align: center;
+            line-height: 40px;
+            height: 40px;
+            color: #fff;
+            background: linear-gradient(90deg, rgba(255, 184, 99, 1) 0%, rgba(254, 132, 100, 1) 100%);
+            border-radius: 22px;
+        }
+    </style>
+</head>
+
+<body>
+   
+    <div class="dialog-window">
+        <div class="dialog-box">
+            <div class="dialog-content">很遗憾您未中奖</div>
+            <div class="dialog-btn">确定</div>
+        </div>
+    </div>
+    <div class="title1">
+
+    </div>
+    <div class="title2">
+
+    </div>
+    <div class="mesinput">
+        <div class="tip">
+            <ul id='tipbox'>
+                <li> 136****2585抽中50元现金</li>
+                <li> 136****2585抽中50元现金</li>
+                <li> 136****2585抽中50元现金</li>
+            </ul>
+        </div>
+    </div>
+    <div class="mainbox">
+        <div class="lottery">
+            <canvas id="myCanvas" width="300" height="300">
+                当前浏览器版本过低，请使用其他浏览器尝试
+            </canvas>
+            <p id="message"></p>
+            <img src="./img/start.png" id="start">
+        </div>
+    </div>
+    <div class="prizetimes">您还有 <em class="yellow">1</em> 次抽奖机会</div>
+    <div class="sub-btn" onclick="look()">—我的中奖纪录—</div>
+    <script src="https://cdn.bootcss.com/jquery/3.3.0/jquery.js"></script>
+    <script src='./js/myslideup.js'> </script>
+    <script src='./js/turntable.js'></script>
+    <script src='./js/remFlex.js'></script>
+    <script>
+        var can = document.getElementById('myCanvas'),
+            screenwidth = document.getElementsByClassName('mainbox')[0].offsetWidth;
+
+        can.width = can.height = screenwidth*2;
+        can.style.width=can.style.height=screenwidth+'px';
+        // can.setAttribute('height', screenwidth*2);
+        // can.setAttribute('width', screenwidth*2);
+        var list = {};
+        var wheelSurf, initData = {
+                data: []
+            },
+            angel;
+            document.querySelector('.yellow').innerHTML=JSON.parse(localStorage.getItem('userdata')).luckDrawSum;
+        // 初始化装盘数据 正常情况下应该由后台返回
+        // var initData = {
+        //     "success": true,
+        //     "list": [{
+        //             "id": 100,
+        //             "name": "5000元京东卡",
+        //             "image": "./img/186@2x.png",
+        //             "rank":1,
+        //             "percent":30
+        //         },
+        //         {
+        //             "id": 101,
+        //             "name": "1000元京东卡",
+        //             "image": "./img/186@2x.png",
+        //             "rank":2,
+        //             "percent":20
+        //         },
+        //         {
+        //             "id": 102,
+        //             "name": "100个比特币",
+        //             "image": "./img/186@2x.png",
+        //             "rank":3,
+        //             "percent":20
+        //         },
+        //         {
+        //             "id": 103,
+        //             "name": "50元话费",
+        //             "image": "./img/186@2x.png",
+        //             "rank":4,
+        //             "percent":15
+        //         },
+        //         {
+        //             "id": 104,
+        //             "name": "100元话费",
+        //             "image": "./img/186@2x.png",
+        //             "rank":5,
+        //             "percent":15
+        //         },
+
+        //     ]
+        // }
+
+        // 计算分配获奖概率(前提所有奖品概率相加100%)
+        // function getGift(){
+        //     var percent = Math.random()*100
+        //     var totalPercent = 0
+        //     for(var i = 0 ,l = initData.list.length;i<l;i++){
+        //         totalPercent += initData.list[i].percent
+        //         if(percent<=totalPercent){
+        //             return initData.list[i]
+        //         }
+        //     }           
+        // }
+      
+
+        $.ajax({
+            type: "GET",
+
+            url: 'http://walle.91yunshi.com/prize?activityId=' + getUrlParms().id,
+            headers: {
+                'Authorization': localStorage.getItem('token')
+            },
+            data: {
+
+
+            },
+            dataType: "json",
+            success: function (res) {
+
+
+                if (res.code == 1001) {
+                    initData.data = res.data;
+                    angel = 360 / initData.data.length;
+
+
+
+                    // var list = {}
+
+
+                    // 格式化成插件需要的奖品列表格式
+                    for (var i = 0, l = initData.data.length; i < l; i++) {
+                        list[i] = {
+                            id: initData.data[i].id,
+                            name: initData.data[i].prizeName,
+                            image: initData.data[i].prizeImageUrl
+                        }
+                    }
+                    // 查看奖品列表格式
+
+// list['12']={id: 0, name: "谢谢参与", image: "http://yunshioss.oss-cn-beijing.aliyuncs.com/luck/242.png"};
+console.log(list);
+                    // 定义转盘奖品
+                    wheelSurf = $('#myCanvas').WheelSurf({
+                        list: list, // 奖品 列表，(必填)
+                        outerCircle: {
+                            color: '#F76B38' // 外圈颜色(可选)
+                        },
+                        innerCircle: {
+                            color: 'transparent' // 里圈颜色(可选)
+                        },
+                        dots: ['#fbf0a9', '#fbb936'], // 装饰点颜色(可选)
+                        disk: ['#FFBEBC', '#FFDAD8', '#FFBEBC', '#FFDAD8', '#FFBEBC',
+                        '#FFDAD8'], //中心奖盘的颜色，默认7彩(可选)
+                        title: {
+                            color: '#5c1e08',
+                            font: '12px Arial'
+                        } // 奖品标题样式(可选)
+                    })
+
+                    // 初始化转盘
+                    wheelSurf.init()
+                }
+            }
+        })
+
+
+  $('.dialog-btn').on('click',function(){
+    $('.dialog-box').removeClass('noprize');
+    document.querySelector('.dialog-window').style.display='none';
+  })
+
+        // 抽奖
+        var throttle = true;
+        $("#start").on('click', function () {
+
+
+            $.ajax({
+                type: "PUT",
+                url:'http://walle.91yunshi.com/prize?activityId=' + getUrlParms().id,
+                headers: {
+                    'Authorization': localStorage.getItem('token')
+                },
+                dataType: "json",
+                success: function (data) {
+                    console.log(data);
+                    
+                    if (data.data.luckDrawSum == 0) {
+                        document.querySelector('.dialog-window').style.display='flex';
+                        document.querySelector('.dialog-content').innerHTML='抽奖次数已经完啦!';
+                    }
+                   
+                 var winData =data.data;  // 正常情况下获奖信息应该由后台返回
+                  
+                 var user=   JSON.parse(localStorage.getItem('userdata'));
+                  user.luckDrawSum=data.data.luckDrawSum;
+                  localStorage.setItem('userdata',JSON.stringify(user));
+                    document.querySelector('.yellow').innerHTML= data.data.luckDrawSum;
+                    $("#message").html('')
+                    if(!throttle){
+                        return false;
+                    }
+                    throttle = false;
+                    var count = 0
+                    // 计算奖品角度
+
+                    for (const key in list) {
+                        if (list.hasOwnProperty(key)) {                    
+                            if (winData.id == list[key].id) {
+                                break;
+                            }
+                            count++    
+                        }
+                    }
+
+                    // 转盘抽奖，
+                    wheelSurf.lottery((count * angel + angel / 2), function () {
+                        // $("#message").html(winData.name);
+                      document.querySelector('.dialog-window').style.display='flex';
+                   
+                     
+                      document.querySelector('.dialog-content').innerHTML=winData.prizeName;
+                        throttle = true;
+                    })
+                },error:function(err){
+                 var err=err.responseJSON;
+                    
+                 var winData =err.data; 
+                    if(err.code==9000){
+                        var user=   JSON.parse(localStorage.getItem('userdata'));
+                  user.luckDrawSum=err.data.luckDrawSum;
+                  localStorage.setItem('userdata',JSON.stringify(user));
+                    document.querySelector('.yellow').innerHTML= err.data.luckDrawSum;
+                    $("#message").html('')
+                    if(!throttle){
+                        return false;
+                    }
+                    throttle = false;
+                    var count = 0
+                    // 计算奖品角度
+
+                    for (const key in list) {
+                        if (list.hasOwnProperty(key)) {                    
+                            if (winData.id == list[key].id) {
+                                break;
+                            }
+                            count++    
+                        }
+                    }
+
+                    // 转盘抽奖，
+                    wheelSurf.lottery((count * angel + angel / 2), function () {
+                        // $("#message").html(winData.name);
+                        document.querySelector('.dialog-window').style.display='flex';
+                        $('.dialog-box').addClass('noprize');
+                        // document.querySelector('.dialog-content').innerHTML='很遗憾，您未中奖!';
+                      document.querySelector('.dialog-content').innerHTML=err.msg;
+                        throttle = true;
+                    })
+                
+                        // document.querySelector('.dialog-window').style.display='flex';
+                    }
+                }
+            })
+
+        })
+
+        function look() {
+            window.location.href = 'win.html?id=' + getUrlParms().id
+        }
+
+
+        $.ajax({ //滚动列表公告数据获取
+            type: "GET",
+
+            url: 'http://walle.91yunshi.com/luckDrawRecord/new',
+            headers: {
+                'Authorization': localStorage.getItem('token')
+            },
+            dataType: "json",
+            success: function (data) {
+
+                var str = "";
+                for (let index = 0; index < data.data.length; index++) {
+
+                    var strPrize = (data.data[index].prizeName).split(',');
+
+                    if (typeof strPrize[1] == 'undefined') {
+                        strPrize = strPrize[0]
+                    } else {
+                        strPrize = strPrize[1]
+                    }
+                    str += `<li>恭喜${data.data[index].phone}抽中${strPrize}</li>`
+
+                }
+                document.getElementById('tipbox').innerHTML = str;
+                $(".tip").scrollTop({
+                    speed: 80 //数值越大 速度越慢
+                });
+                // $("#tipbox").simpleSpy();
+            },
+            error: function (err) {
+                // console.log(err.responseJSON.msg);
+                alert(err.responseJSON.msg);
+                //  window.location.href='login.html'
+            }
+        });
+    </script>
+</body>
+
+</html>
